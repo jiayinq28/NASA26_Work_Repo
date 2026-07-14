@@ -1,0 +1,61 @@
+-- ======================================================================
+-- Project: SwitchesToOled
+-- Description: Testbench for the SwitchesToOled project
+-- Directions:
+-- 1. Add this chunk of code to the end of your top level Bluespec file (OledTop.bs)
+-- 2. Compile and run the Bluespec simulation using these commands 
+--    bsc -sim -g mkTestBench(or your test module) -u OledTop.bs (or your top level Bluespec file)
+--    bsc -sim -e mkTestBench (or your test module) -o mkTestBench (or your test module)
+--   ./mkTestBench -m 20   (the number is pretty arbitrary)
+-- ======================================================================
+
+mkTestBench :: Module Empty --(or the module you want to test, mine was OledTopIFC)
+mkTestBench =
+    module
+        oledTop <- mkOledTop
+
+        -- a handful of switch patterns to sweep through:
+        -- all off, all on, single low bit, single high bit,
+        -- alternating, and an arbitrary mixed value
+        -- 0000000 == 000
+        let allOff :: Vector 8 Bool = replicate False
+        -- 11111111 == 255
+        let allOn  :: Vector 8 Bool = replicate True
+        -- 00000001 == 1
+        let lsbOnly :: Vector 8 Bool = update allOff 0 True
+        -- 10000000 == 128
+        let msbOnly :: Vector 8 Bool = update allOff 7 True
+        -- 10101010 == 170
+        let altA :: Vector 8 Bool = update (update (update (update allOff 1 True) 3 True) 5 True) 7 True
+        -- 00101010 == 42
+        let mixed :: Vector 8 Bool = update (update (update allOff 1 True) 3 True) 5 True
+
+        let currentPattern :: UInt 4 -> Vector 8 Bool
+            currentPattern i =
+                if i == 0 then allOff
+                else if i == 1 then allOn
+                else if i == 2 then lsbOnly
+                else if i == 3 then msbOnly
+                else if i == 4 then altA
+                else mixed
+
+        idx      :: Reg (UInt 4) <- mkReg 0
+        subCycle :: Reg (UInt 4) <- mkReg 0
+
+        rules
+            "drive_switches": when idx < 6 ==> action
+                oledTop.put_switches (currentPattern idx)
+
+            "show_result": when idx < 6 ==> action
+                if subCycle == 1 then action
+                    $display "switches=%b  binary=%s  decimal=%s"
+                        (currentPattern idx)
+                        oledTop.get_binary_row
+                        oledTop.get_decimal_row
+                    if idx == 5 then
+                        $finish
+                    else action
+                        idx      := idx + 1
+                        subCycle := 0
+                else
+                    subCycle := subCycle + 1

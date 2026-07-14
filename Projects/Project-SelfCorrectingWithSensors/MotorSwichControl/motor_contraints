@@ -1,0 +1,36 @@
+# ----------------------------------------------------------------------------
+# Clock Source - Bank 13
+# ---------------------------------------------------------------------------- 
+set_property PACKAGE_PIN Y9 [get_ports {clk}];  # Mapped to "clk" (GCLK)
+
+# ----------------------------------------------------------------------------
+# JB Pmod - Bank 13
+# ---------------------------------------------------------------------------- 
+set_property PACKAGE_PIN W8 [get_ports {servo_pwm}];  # "JB4" (Servo PWM output)
+
+# ----------------------------------------------------------------------------
+# User LEDs - Bank 33
+# ---------------------------------------------------------------------------- 
+set_property PACKAGE_PIN T22 [get_ports {LD[0]}];  # "LD0"
+set_property PACKAGE_PIN T21 [get_ports {LD[1]}];  # "LD1"
+set_property PACKAGE_PIN U22 [get_ports {LD[2]}];  # "LD2"
+set_property PACKAGE_PIN U21 [get_ports {LD[3]}];  # "LD3"
+set_property PACKAGE_PIN V22 [get_ports {LD[4]}];  # "LD4"
+set_property PACKAGE_PIN W22 [get_ports {LD[5]}];  # "LD5"
+set_property PACKAGE_PIN U19 [get_ports {LD[6]}];  # "LD6"
+set_property PACKAGE_PIN U14 [get_ports {LD[7]}];  # "LD7"
+
+## ----------------------------------------------------------------------------
+## User DIP Switches - Bank 35
+## ---------------------------------------------------------------------------- 
+set_property PACKAGE_PIN F22 [get_ports {SW0}];  # "SW0" (Left Command Switch)
+set_property PACKAGE_PIN G22 [get_ports {SW1}];  # "SW1" (Right Command Switch)
+set_property PACKAGE_PIN H22 [get_ports {SW2}];  # "SW2" (Neutral Command Switch)
+
+# ----------------------------------------------------------------------------
+# IOSTANDARD Constraints
+# ---------------------------------------------------------------------------- 
+set_property IOSTANDARD LVCMOS33 [get_ports -of_objects [get_iobanks 33]];
+set_property IOSTANDARD LVCMOS18 [get_ports -of_objects [get_iobanks 34]];
+set_property IOSTANDARD LVCMOS18 [get_ports -of_objects [get_iobanks 35]];
+set_property IOSTANDARD LVCMOS33 [get_ports -of_objects [get_iobanks 13]];

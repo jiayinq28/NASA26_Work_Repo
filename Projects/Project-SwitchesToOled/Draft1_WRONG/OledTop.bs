@@ -1,0 +1,61 @@
+package OledTop where
+
+import SwValsBetter
+import SwValsBetterTypes
+import Vector
+
+interface OledTopIFC =
+    get_binary_row  :: Vector 8 (Bit 8);
+    get_decimal_row :: Vector 8 (Bit 8);
+    get_leds :: Bit 8;
+    put_switches :: Vector 8 Bool -> Action
+
+
+mkOledTop :: Module OledTopIFC
+mkOledTop = 
+    module
+        swVals <- mkSwValsBetter
+
+        bin_str_reg <- mkReg (replicate (8'h20 :: Bit 8))
+        dec_str_reg <- mkReg (replicate (8'h20 :: Bit 8))
+
+        rules
+            "format_oled_strings": when True ==> action
+
+                let val :: UInt 8 = swVals.switchesSum_0_arg0
+
+                let formatBin :: Integer -> Bit 8
+                    formatBin i =
+                        let bitPos :: UInt 8 = fromInteger (7 - i)
+                -- Find out what the >> means
+                        in if ((val >> bitPos) & 1) == 1 then 8'h31 else 8'h30
+                -- genWith is from the vector library and it generates a vector by
+                -- passing the index of each element into a helper function
+                -- here it's used to generate a vector of 8-bit ASCII characters
+                bin_str_reg := genWith formatBin
+
+                let hundreds  :: UInt 8 = val / 100
+                let remainder :: UInt 8 = val % 100
+                let tens      :: UInt 8 = remainder / 10
+                let ones      :: UInt 8 = remainder % 10
+
+                let empty_str :: Vector 8 (Bit 8) = replicate 8'h20
+                let dec_1 = update empty_str (5 :: UInt 3) (8'h30 + pack hundreds)
+                let dec_2 = update dec_1     (6 :: UInt 3) (8'h30 + pack tens)
+                let dec_3 = update dec_2     (7 :: UInt 3) (8'h30 + pack ones)
+
+                dec_str_reg := dec_3
+
+        interface
+            get_binary_row  = bin_str_reg
+            get_decimal_row = dec_str_reg
+            get_leds = pack swVals.switchesSum_0_arg0
+            put_switches sws = action
+                swVals.sw0 (select sws 0)
+                swVals.sw1 (select sws 1)
+                swVals.sw2 (select sws 2)
+                swVals.sw3 (select sws 3)
+                swVals.sw4 (select sws 4)
+                swVals.sw5 (select sws 5)
+                swVals.sw6 (select sws 6)
+                swVals.sw7 (select sws 7)

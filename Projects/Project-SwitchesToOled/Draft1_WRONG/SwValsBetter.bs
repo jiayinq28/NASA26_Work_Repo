@@ -1,0 +1,161 @@
+package SwValsBetter where {
+import FloatingPoint;
+                    
+import Vector;
+             
+import SwValsBetterTypes;
+                        
+import BluespecFP;
+                 
+interface SwValsBetterIfc {-# always_ready ,
+                              always_enabled  #-} = {
+    switchesSum_0_guard :: Prelude.Bool;
+    switchesSum_0_arg0 :: Prelude.UInt 8;
+    sw0 :: Prelude.Bool -> Prelude.Action {-# prefixs = "",
+                                              arg_names = [sw0] #-};
+    sw1 :: Prelude.Bool -> Prelude.Action {-# prefixs = "",
+                                              arg_names = [sw1] #-};
+    sw2 :: Prelude.Bool -> Prelude.Action {-# prefixs = "",
+                                              arg_names = [sw2] #-};
+    sw3 :: Prelude.Bool -> Prelude.Action {-# prefixs = "",
+                                              arg_names = [sw3] #-};
+    sw4 :: Prelude.Bool -> Prelude.Action {-# prefixs = "",
+                                              arg_names = [sw4] #-};
+    sw5 :: Prelude.Bool -> Prelude.Action {-# prefixs = "",
+                                              arg_names = [sw5] #-};
+    sw6 :: Prelude.Bool -> Prelude.Action {-# prefixs = "",
+                                              arg_names = [sw6] #-};
+    sw7 :: Prelude.Bool -> Prelude.Action {-# prefixs = "",
+                                              arg_names = [sw7] #-}
+};
+ 
+{-# properties mkSwValsBetter = { verilog } #-};
+                                               
+mkSwValsBetter :: Prelude.Module SwValsBetterIfc;
+mkSwValsBetter = 
+    module {
+      sw0_wire :: Wire Prelude.Bool <- mkBypassWire;
+      sw1_wire :: Wire Prelude.Bool <- mkBypassWire;
+      sw2_wire :: Wire Prelude.Bool <- mkBypassWire;
+      sw3_wire :: Wire Prelude.Bool <- mkBypassWire;
+      sw4_wire :: Wire Prelude.Bool <- mkBypassWire;
+      sw5_wire :: Wire Prelude.Bool <- mkBypassWire;
+      sw6_wire :: Wire Prelude.Bool <- mkBypassWire;
+      sw7_wire :: Wire Prelude.Bool <- mkBypassWire;
+      rules {
+      };
+      Prelude.return
+        (interface SwValsBetterIfc {
+           switchesSum_0_guard :: Prelude.Bool;
+           switchesSum_0_guard =  Prelude.True;;
+           switchesSum_0_arg0 :: Prelude.UInt 8;
+           switchesSum_0_arg0 = 
+               (+)
+                 ((+)
+                    ((+)
+                       ((+)
+                          ((+)
+                             ((+)
+                                ((+)
+                                   (if sw0_wire._read then
+                                        1::(Prelude.UInt 8)
+                                    else
+                                        0::(Prelude.UInt 8))
+                                   (if sw1_wire._read then
+                                        2::(Prelude.UInt 8)
+                                    else
+                                        0::(Prelude.UInt 8)))
+                                (if sw2_wire._read then
+                                     4::(Prelude.UInt 8)
+                                 else
+                                     0::(Prelude.UInt 8)))
+                             (if sw3_wire._read then
+                                  8::(Prelude.UInt 8)
+                              else
+                                  0::(Prelude.UInt 8)))
+                          (if sw4_wire._read then
+                               16::(Prelude.UInt 8)
+                           else
+                               0::(Prelude.UInt 8)))
+                       (if sw5_wire._read then
+                            32::(Prelude.UInt 8)
+                        else
+                            0::(Prelude.UInt 8)))
+                    (if sw6_wire._read then
+                         64::(Prelude.UInt 8)
+                     else
+                         0::(Prelude.UInt 8)))
+                 (if sw7_wire._read then
+                      128::(Prelude.UInt 8)
+                  else
+                      0::(Prelude.UInt 8));;
+           sw0 val =  sw0_wire := val;;
+           sw1 val =  sw1_wire := val;;
+           sw2 val =  sw2_wire := val;;
+           sw3 val =  sw3_wire := val;;
+           sw4 val =  sw4_wire := val;;
+           sw5 val =  sw5_wire := val;;
+           sw6 val =  sw6_wire := val;;
+           sw7 val =  sw7_wire := val;
+         })
+    };;
+      
+interface SwValsBetterRulesIfc = {
+    switchesSum_action :: Prelude.UInt 8 -> Prelude.Action;
+    sw0_action :: Prelude.ActionValue Prelude.Bool;
+    sw1_action :: Prelude.ActionValue Prelude.Bool;
+    sw2_action :: Prelude.ActionValue Prelude.Bool;
+    sw3_action :: Prelude.ActionValue Prelude.Bool;
+    sw4_action :: Prelude.ActionValue Prelude.Bool;
+    sw5_action :: Prelude.ActionValue Prelude.Bool;
+    sw6_action :: Prelude.ActionValue Prelude.Bool;
+    sw7_action :: Prelude.ActionValue Prelude.Bool
+};
+ 
+mkSwValsBetterRules :: SwValsBetterIfc ->
+                       SwValsBetterRulesIfc -> Prelude.Rules;
+mkSwValsBetterRules ifc ifcRules = 
+    rules {
+      
+      "switchesSum_0":  when ifc.switchesSum_0_guard
+                         ==>
+                           ifcRules.switchesSum_action ifc.switchesSum_0_arg0;
+      
+      "sw0":  when Prelude.True
+               ==>
+                 action { sw0Val <- ifcRules.sw0_action; ifc.sw0 sw0Val; };
+      
+      "sw1":  when Prelude.True
+               ==>
+                 action { sw1Val <- ifcRules.sw1_action; ifc.sw1 sw1Val; };
+      
+      "sw2":  when Prelude.True
+               ==>
+                 action { sw2Val <- ifcRules.sw2_action; ifc.sw2 sw2Val; };
+      
+      "sw3":  when Prelude.True
+               ==>
+                 action { sw3Val <- ifcRules.sw3_action; ifc.sw3 sw3Val; };
+      
+      "sw4":  when Prelude.True
+               ==>
+                 action { sw4Val <- ifcRules.sw4_action; ifc.sw4 sw4Val; };
+      
+      "sw5":  when Prelude.True
+               ==>
+                 action { sw5Val <- ifcRules.sw5_action; ifc.sw5 sw5Val; };
+      
+      "sw6":  when Prelude.True
+               ==>
+                 action { sw6Val <- ifcRules.sw6_action; ifc.sw6 sw6Val; };
+      
+      "sw7":  when Prelude.True
+               ==>
+                 action { sw7Val <- ifcRules.sw7_action; ifc.sw7 sw7Val; }
+    };;
+      
+addSwValsBetterRules :: SwValsBetterIfc ->
+                        SwValsBetterRulesIfc -> Prelude.Module Prelude.Empty;
+addSwValsBetterRules ifc ifcRules = 
+    Prelude.addRules (mkSwValsBetterRules ifc ifcRules);
+}

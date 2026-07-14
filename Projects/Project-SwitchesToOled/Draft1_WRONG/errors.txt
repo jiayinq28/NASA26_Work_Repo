@@ -1,0 +1,16 @@
+In this group of drafts is the manual code I wrote for the making the switch values
+
+There are two versions, one is more optimized and elegant than the other (hence better and not better)
+    - Both functionally work the same but the better one allows me to declare switches as
+      one thing later in verilog which is a lot better in my opinion.
+    - It would be good to also note that it would be a good example to continue using 
+
+
+Some troubles I came across:
+    - The OLED demo uses a led to signal that it is ready to display, so that limits
+      us from using all of the leds associated with the switches
+    - There are errors coming out of the base ten code, display is fine, number has some errors
+    - What to do?
+        - I think the best way to move forward is to remove the leds all together
+        - Run some test cases for the base ten code. 
+
